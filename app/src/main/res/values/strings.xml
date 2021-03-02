@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">TheMovieCollective</string>
+    <string name="movie_title_label">Title</string>
+    <string name="movie_title">Inception</string>
+    <string name="movie_director_label">Director</string>
+    <string name="movie_director">Christopher Nolan</string>
+    <string name="movie_description_label">Description</string>
+    <string name="movie_description">Inception is a 2010 science fiction action film written and directed by Christopher Nolan, who also produced the film with his wife, Emma Thomas. The film stars Leonardo DiCaprio as a professional thief who steals information by infiltrating the subconscious of his targets…</string>
+    <string name="movie_earnings_label">Earnings</string>
+    <string name="movie_earnings">$823 million</string>
+    <string name="movie_release_date_label">Release Date</string>
+    <string name="movie_release_date">16/07/2010</string>
+    <string name="movie_rating_label">Rating</string>
+    <string name="movie_add_button">Submit</string>
+    <string name="movie_edit_button">Save</string>
+
+    <string name="menu_view_action">View</string>
+    <string name="menu_movie_action">Add</string>
+
+    <string name="nav_menu_movies">Movies</string>
+    <string name="nav_menu_add">Contribute</string>
+    <string name="nav_menu_favorites">Favorites</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">The Film Collective</string>
+    <string name="nav_header_subtitle">The Home of Movies!</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <string name="action_movie">Movies</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

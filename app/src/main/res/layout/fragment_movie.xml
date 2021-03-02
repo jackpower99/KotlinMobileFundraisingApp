@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.MovieFragment">
+
+    <EditText
+        android:id="@+id/movieTitle"
+        android:layout_width="210dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="16dp"
+        android:autofillHints="Please Enter an Amount"
+        android:hint="@string/movie_title"
+        android:inputType="text"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/movieTitleLabel"
+        android:layout_width="130dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:gravity="center|left"
+        android:text="@string/movie_title_label"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/movieTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/movieDirectorLabel"
+        android:layout_width="130dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:gravity="center|left"
+        android:text="@string/movie_director_label"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/movieDirector"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movieTitleLabel" />
+
+    <EditText
+        android:id="@+id/movieDirector"
+        android:layout_width="210dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/movie_director"
+        android:inputType="text"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf ="@id/movieTitle" />
+
+    <TextView
+        android:id="@+id/movieReleaseDateLabel"
+        android:layout_width="130dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:gravity="center|left"
+        android:text="@string/movie_release_date_label"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/movieReleaseDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movieDirectorLabel" />
+
+    <EditText
+        android:id="@+id/movieReleaseDate"
+        android:layout_width="210dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/movie_release_date"
+        android:inputType="date"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf ="@id/movieDirector" />
+
+    <TextView
+        android:id="@+id/movieEarningsLabel"
+        android:layout_width="130dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:gravity="center|left"
+        android:text="@string/movie_earnings_label"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/movieEarnings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movieReleaseDateLabel" />
+
+    <EditText
+        android:id="@+id/movieEarnings"
+        android:layout_width="210dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/movie_earnings"
+        android:inputType="date"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf ="@id/movieReleaseDate" />
+
+
+    <TextView
+        android:id="@+id/movieRatingLabel"
+        android:layout_width="170dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:gravity="center|left"
+        android:text="@string/movie_rating_label"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movieDescription" />
+
+    <TextView
+        android:id="@+id/movieDescriptionLabel"
+        android:layout_width="130dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:ems="10"
+        android:gravity="center|left"
+        android:text="@string/movie_description_label"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/movieDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/movieEarningsLabel" />
+
+    <EditText
+        android:id="@+id/movieDescription"
+        android:layout_width="210dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        android:singleLine="false"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movieEarnings" />
+
+    <RatingBar
+        android:id="@+id/movieRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="10dp"
+        android:numStars="5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movieRatingLabel" />
+
+    <Button
+        android:id="@+id/addMovieBtn"
+        android:layout_width="147dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/movie_add_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movieRating" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
