@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ie.wit.R
 import ie.wit.adapters.MoviesAdapter
 import ie.wit.main.MovieApp
+import ie.wit.models.MovieModel
 import kotlinx.android.synthetic.main.fragment_report.view.*
 
 class ViewFragment : Fragment() {
@@ -33,6 +34,10 @@ class ViewFragment : Fragment() {
         root.recyclerView.adapter = MoviesAdapter(app.moviesStore.findAll())
 
         return root
+    }
+
+    fun onMovieClicked(movie: MovieModel){
+
     }
 
     companion object {

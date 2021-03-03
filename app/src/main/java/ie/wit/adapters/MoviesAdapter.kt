@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ie.wit.R
+import ie.wit.helpers.readImageFromPath
 import ie.wit.models.MovieModel
 import kotlinx.android.synthetic.main.card_movie.view.*
 
@@ -22,8 +23,8 @@ class MoviesAdapter constructor(private var movies: List<MovieModel>)
     }
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        val donation = movies[holder.adapterPosition]
-        holder.bind(donation)
+        val movie = movies[holder.adapterPosition]
+        holder.bind(movie)
     }
 
     override fun getItemCount(): Int = movies.size
@@ -35,7 +36,7 @@ class MoviesAdapter constructor(private var movies: List<MovieModel>)
             itemView.movie_view_director.text = movie.director
             itemView.movie_view_releaseDate.text = movie.releaseDate.toString()
             itemView.movie_view_ratingBar.rating = movie.rating.toFloat()
-            itemView.movie_view_Image.setImageResource(R.mipmap.ic_launcher_round)
+            itemView.movie_view_Image.setImageBitmap(readImageFromPath(itemView.context,movie.image))
         }
     }
 }

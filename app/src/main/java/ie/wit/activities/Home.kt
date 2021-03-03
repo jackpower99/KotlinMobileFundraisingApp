@@ -1,5 +1,6 @@
 package ie.wit.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -9,7 +10,6 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 import ie.wit.R
 import ie.wit.fragments.MovieFragment
 import ie.wit.fragments.ViewFragment
@@ -83,4 +83,20 @@ class Home : AppCompatActivity(),
             .addToBackStack(null)
             .commit()
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+    }
+
+//    override fun passDataCom(chosen: Parcelable) {
+//        val bundle = Bundle()
+//        bundle.putParcelable("movie", chosen)
+//
+//        val transaction = this.supportFragmentManager.beginTransaction()
+//        val viewFragment = ViewFragment()
+//        viewFragment.arguments = bundle
+//
+//        transaction.replace(R.id.homeFrame, viewFragment)
+//        transaction.commit()
+//    }
 }

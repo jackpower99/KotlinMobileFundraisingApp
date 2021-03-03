@@ -1,6 +1,7 @@
 package ie.wit.models
 
 import android.util.Log
+import kotlinx.android.synthetic.main.fragment_movie.*
 
 var lastId = 0L
 
@@ -26,6 +27,20 @@ class MovieMemStore : MovieStore {
         movie.id = getId()
         movies.add(movie)
         logAll()
+    }
+
+    override fun update(movie: MovieModel) {
+        var foundMovie: MovieModel? = movies.find { m -> m.id == movie.id}
+        if (foundMovie != null) {
+            foundMovie.title = movie.title
+            foundMovie.director = movie.director
+            foundMovie.releaseDate = movie.releaseDate
+            foundMovie.earnings = movie.earnings
+            foundMovie.description = movie.description
+            foundMovie.rating = movie.rating
+            foundMovie.image = movie.image
+            logAll()
+        }
     }
 
     fun logAll() {

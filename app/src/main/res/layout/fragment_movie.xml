@@ -9,7 +9,7 @@
     <EditText
         android:id="@+id/movieTitle"
         android:layout_width="210dp"
-        android:layout_height="47dp"
+        android:layout_height="40dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="16dp"
         android:autofillHints="Please Enter an Amount"
@@ -22,7 +22,7 @@
     <TextView
         android:id="@+id/movieTitleLabel"
         android:layout_width="130dp"
-        android:layout_height="47dp"
+        android:layout_height="40dp"
         android:layout_marginStart="3dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="50dp"
@@ -37,7 +37,7 @@
     <TextView
         android:id="@+id/movieDirectorLabel"
         android:layout_width="130dp"
-        android:layout_height="47dp"
+        android:layout_height="40dp"
         android:layout_marginStart="3dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="50dp"
@@ -52,19 +52,19 @@
     <EditText
         android:id="@+id/movieDirector"
         android:layout_width="210dp"
-        android:layout_height="47dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/movie_director"
         android:inputType="text"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf ="@id/movieTitle" />
+        app:layout_constraintTop_toBottomOf="@id/movieTitle" />
 
     <TextView
         android:id="@+id/movieReleaseDateLabel"
         android:layout_width="130dp"
-        android:layout_height="47dp"
+        android:layout_height="40dp"
         android:layout_marginStart="3dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="50dp"
@@ -79,19 +79,19 @@
     <EditText
         android:id="@+id/movieReleaseDate"
         android:layout_width="210dp"
-        android:layout_height="47dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/movie_release_date"
         android:inputType="date"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf ="@id/movieDirector" />
+        app:layout_constraintTop_toBottomOf="@id/movieDirector" />
 
     <TextView
         android:id="@+id/movieEarningsLabel"
         android:layout_width="130dp"
-        android:layout_height="47dp"
+        android:layout_height="40dp"
         android:layout_marginStart="3dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="50dp"
@@ -106,21 +106,21 @@
     <EditText
         android:id="@+id/movieEarnings"
         android:layout_width="210dp"
-        android:layout_height="47dp"
+        android:layout_height="40dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:hint="@string/movie_earnings"
         android:inputType="date"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf ="@id/movieReleaseDate" />
+        app:layout_constraintTop_toBottomOf="@id/movieReleaseDate" />
 
 
     <TextView
         android:id="@+id/movieRatingLabel"
-        android:layout_width="170dp"
-        android:layout_height="47dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="130dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="3dp"
         android:layout_marginTop="20dp"
         android:ems="10"
         android:gravity="center|left"
@@ -132,7 +132,7 @@
     <TextView
         android:id="@+id/movieDescriptionLabel"
         android:layout_width="130dp"
-        android:layout_height="47dp"
+        android:layout_height="40dp"
         android:layout_marginStart="3dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="50dp"
@@ -147,7 +147,7 @@
     <EditText
         android:id="@+id/movieDescription"
         android:layout_width="210dp"
-        android:layout_height="150dp"
+        android:layout_height="80dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
@@ -161,12 +161,12 @@
     <RatingBar
         android:id="@+id/movieRating"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
         android:numStars="5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/movieRatingLabel" />
+        app:layout_constraintStart_toEndOf="@+id/movieRatingLabel"
+        app:layout_constraintTop_toBottomOf="@+id/movieDescription" />
 
     <Button
         android:id="@+id/addMovieBtn"
@@ -177,6 +177,26 @@
         android:text="@string/movie_add_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/movieRating" />
+
+    <Button
+        android:id="@+id/addImageBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="10dp"
+        android:text="@string/image_add_button"
+        app:layout_constraintEnd_toStartOf="@+id/addMovieBtn"
+        app:layout_constraintTop_toBottomOf="@+id/movieRating" />
+
+    <ImageView
+        android:id="@+id/movieImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addImageBtn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
