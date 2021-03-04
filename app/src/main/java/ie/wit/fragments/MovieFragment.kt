@@ -5,10 +5,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.graphics.isSrgb
 import org.jetbrains.anko.toast
 import ie.wit.R
@@ -22,7 +24,6 @@ import kotlinx.android.synthetic.main.fragment_movie.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-
 class MovieFragment : Fragment() {
 
     lateinit var app: MovieApp
@@ -34,6 +35,16 @@ class MovieFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         app = activity?.application as MovieApp
+
+        var args = getArguments()
+        Log.i("1", args.toString())
+
+        var bundle = args?.getInt("movieId")
+        Log.i("2", bundle.toString())
+
+
+//        var editMovieId = args?.getLong("movieId")
+//        Log.i("Movie Fragment Created", editMovieId.toString())
     }
 
     override fun onCreateView(

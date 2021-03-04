@@ -77,7 +77,7 @@ class Home : AppCompatActivity(),
             super.onBackPressed()
     }
 
-    private fun navigateTo(fragment: Fragment) {
+    internal fun navigateTo(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.homeFrame, fragment)
             .addToBackStack(null)
