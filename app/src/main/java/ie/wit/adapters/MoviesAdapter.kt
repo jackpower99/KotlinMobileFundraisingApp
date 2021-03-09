@@ -50,4 +50,9 @@ class MoviesAdapter constructor(private var movies: List<MovieModel>, private va
             itemView.setOnClickListener{listener.onMovieClick(movie)}
             }
         }
+
+    fun updateList(list: MutableList<MovieModel>) {
+        movies = list
+        notifyDataSetChanged()
+    }
 }

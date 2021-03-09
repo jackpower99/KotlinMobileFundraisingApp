@@ -4,11 +4,14 @@ package ie.wit.fragments
 import android.app.Activity
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.core.view.get
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,11 +30,14 @@ import kotlinx.android.synthetic.main.fragment_report.view.*
 class ViewFragment : Fragment(), MovieClickListener {
 
     lateinit var app: MovieApp
-    private lateinit var removedMovie: MovieModel
+    private lateinit var editTextSearch: EditText
+
+    lateinit var removedMovie : MovieModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         app = activity?.application as MovieApp
+
     }
 
     override fun onCreateView(
@@ -58,6 +64,8 @@ class ViewFragment : Fragment(), MovieClickListener {
         val swap = ItemTouchHelper(itemSwipe)
         swap.attachToRecyclerView(root.recyclerView)
 
+        searchMovies(root)
+
         return root
     }
 
@@ -68,11 +76,13 @@ class ViewFragment : Fragment(), MovieClickListener {
 
         builder.setPositiveButton("Confirm"){ dialog, which ->
             val position = viewHolder.adapterPosition
-          //  removedMovie = MovieMemStore().movies[position]
-            app.moviesStore.deleteMovie(position.toLong())
-            root.recyclerView.adapter?.notifyItemRemoved(position)
-            //Log.i("removed movie:", removedMovie.title)
+            val movieTest = app.moviesStore.findAll()
 
+            removedMovie = movieTest[position]
+
+            app.moviesStore.deleteMovie(removedMovie.id)
+            root.recyclerView.adapter?.notifyItemRemoved(position)
+            root.recyclerView.adapter?.notifyDataSetChanged()
         }
 
         builder.setNegativeButton("Cancel"){ dialog, which ->
@@ -98,5 +108,38 @@ class ViewFragment : Fragment(), MovieClickListener {
                 fragment.setArguments(args)
 
         (activity as Home).navigateTo(fragment)
+    }
+
+    fun searchMovies(view: View){
+        editTextSearch = view.search_bar
+
+        editTextSearch.addTextChangedListener(object :TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+                filterList(s.toString(),view)
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+        })
+
+    }
+
+    private fun filterList(filterItem: String,root: View){
+        var tempList: MutableList<MovieModel> = ArrayList()
+
+        for(m in app.moviesStore.findAll()){
+            if(filterItem in m.title){
+                tempList.add(m)
+            }
+        }
+
+        //root.recyclerView.adapter = MoviesAdapter(tempList,this)
+        (root.recyclerView.adapter as MoviesAdapter).updateList(tempList)
+        (root.recyclerView.adapter as MoviesAdapter).notifyDataSetChanged()
     }
 }

@@ -14,7 +14,7 @@ class MovieMemStore : MovieStore {
     val movies = ArrayList<MovieModel>()
 
 
-    override fun findAll(): List<MovieModel> {
+    override fun findAll(): ArrayList<MovieModel> {
         return movies
 
     }
@@ -45,8 +45,9 @@ class MovieMemStore : MovieStore {
     }
 
     override fun deleteMovie(id: Long) {
-        movies.removeAt(id.toInt())
-        logAll()
+        movies.removeIf{m-> (id == m.id)}
+        Log.i("deleted movie: ", id.toString())
+
     }
 
     fun logAll() {
