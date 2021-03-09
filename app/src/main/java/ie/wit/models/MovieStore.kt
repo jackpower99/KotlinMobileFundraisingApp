@@ -5,4 +5,5 @@ interface MovieStore {
     fun findById(id: Long) : MovieModel?
     fun create(movie: MovieModel)
     fun update(movie: MovieModel)
+    fun deleteMovie(id: Long)
 }

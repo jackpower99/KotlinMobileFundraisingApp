@@ -16,6 +16,7 @@ import org.jetbrains.anko.toast
 import ie.wit.R
 import ie.wit.activities.Home
 import ie.wit.helpers.readImage
+import ie.wit.helpers.readImageFromPath
 import ie.wit.helpers.showImagePicker
 import ie.wit.main.MovieApp
 import ie.wit.models.MovieModel
@@ -27,24 +28,14 @@ import java.time.format.DateTimeFormatter
 class MovieFragment : Fragment() {
 
     lateinit var app: MovieApp
-
-    val IMAGE_REQUEST = 1
+    val dateformat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+    var edit = false
 
     var movie = MovieModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         app = activity?.application as MovieApp
-
-        var args = getArguments()
-        Log.i("1", args.toString())
-
-        var bundle = args?.getInt("movieId")
-        Log.i("2", bundle.toString())
-
-
-//        var editMovieId = args?.getLong("movieId")
-//        Log.i("Movie Fragment Created", editMovieId.toString())
     }
 
     override fun onCreateView(
@@ -55,8 +46,18 @@ class MovieFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_movie, container, false)
         activity?.title = getString(R.string.action_movie)
 
-        setButtonListener(root)
+        var args = getArguments()
+        Log.i("1", args.toString())
 
+        if (args != null) {
+
+            if (!args.isEmpty) {
+                var editMovieID = args.getLong("movieID")
+                Log.i("2", editMovieID.toString())
+                updateMovie(root,editMovieID)
+            }
+        }
+        setButtonListener(root)
         return root
     }
 
@@ -73,7 +74,6 @@ class MovieFragment : Fragment() {
     fun setButtonListener( layout: View) {
         layout.addMovieBtn.setOnClickListener {
 
-            val dateformat = DateTimeFormatter.ofPattern("dd/MM/yyyy")
             val dateOfRelease = LocalDate.parse(movieReleaseDate.text, dateformat)
 
             movie.title = movieTitle.text.toString()
@@ -87,13 +87,38 @@ class MovieFragment : Fragment() {
                 activity?.toast("Please enter required fields (title,director,description,release date")
             }
             else {
-                app.moviesStore.create(movie.copy())
+                if(edit){
+                    app.moviesStore.update(movie.copy())
+                } else {
+                    app.moviesStore.create(movie.copy())
+                }
             }
         }
-
-
         layout.addImageBtn.setOnClickListener{
             pickImageFromGallery()
+        }
+    }
+
+    fun updateMovie(view: View, editMovieID: Long){
+        var movieForEdit = app.moviesStore.findById(editMovieID)
+
+        if (movieForEdit != null) {
+
+            Log.i("3", movieForEdit.title)
+            movie = movieForEdit
+            edit = true
+            view.movieTitle.setText(movie.title)
+            view.movieDirector.setText(movie.director)
+            view.movieReleaseDate.setText(movie.releaseDate.format(dateformat))
+            view.movieEarnings.setText(movie.earnings.toString())
+            view.movieDescription.setText(movie.description)
+            view.movieRating.rating = movie.rating.toFloat()
+            view.movieImage.setImageBitmap(readImageFromPath((activity as Home), movie.image))
+
+            if (movie.image != null) {
+                view.addImageBtn.setText(R.string.change_image)
+            }
+            view.addMovieBtn.setText(R.string.save_changes)
         }
     }
 

@@ -48,20 +48,6 @@ class MoviesAdapter constructor(private var movies: List<MovieModel>, private va
             itemView.movie_view_ratingBar.rating = movie.rating.toFloat()
             itemView.movie_view_Image.setImageBitmap(readImageFromPath(itemView.context,movie.image))
             itemView.setOnClickListener{listener.onMovieClick(movie)}
-
-//            itemView.setOnClickListener {
-
-//                Log.i("test", "Item clicked")
-//                val fragment = MovieFragment()
-//                val args = Bundle()
-//                args.putLong("movieID", movie.id)
-//                fragment.setArguments(args)
-//
-//                val activity = itemView.context as AppCompatActivity
-//                activity.supportFragmentManager.beginTransaction().replace(R.id.homeFrame, fragment)
-//                    .addToBackStack(null).commit()
-//            }
-
             }
         }
 }

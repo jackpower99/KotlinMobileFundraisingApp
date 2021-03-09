@@ -43,6 +43,11 @@ class MovieMemStore : MovieStore {
         }
     }
 
+    override fun deleteMovie(id: Long) {
+        movies.removeAt(id.toInt())
+        logAll()
+    }
+
     fun logAll() {
         movies.forEach { Log.v("Movie", "${it}") }
     }
