@@ -16,6 +16,7 @@ class MovieMemStore : MovieStore {
 
     override fun findAll(): List<MovieModel> {
         return movies
+
     }
 
     override fun findById(id: Long): MovieModel? {
