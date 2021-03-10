@@ -28,10 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
-            android:layout_toEndOf="@+id/movie_view_Image"
             android:textSize="24sp"
             tools:text="Inception" />
 
@@ -41,10 +39,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/movie_view_Title"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="70dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
-            android:layout_toEndOf="@+id/movie_view_Image"
             android:textSize="18sp"
             tools:text="Christopher Nolan" />
 
@@ -54,10 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/movie_view_director"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="90dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="5dp"
-            android:layout_toEndOf="@+id/movie_view_Image"
             android:textSize="18sp"
             tools:text="12/08/2003" />
 
@@ -68,7 +62,9 @@
             android:layout_below="@+id/movie_view_releaseDate"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp" />
+            android:layout_marginEnd="5dp"
+            android:isIndicator="true"
+            />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

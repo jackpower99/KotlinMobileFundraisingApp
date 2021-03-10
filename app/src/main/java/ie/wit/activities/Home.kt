@@ -83,20 +83,4 @@ class Home : AppCompatActivity(),
             .addToBackStack(null)
             .commit()
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-    }
-
-//    override fun passDataCom(chosen: Parcelable) {
-//        val bundle = Bundle()
-//        bundle.putParcelable("movie", chosen)
-//
-//        val transaction = this.supportFragmentManager.beginTransaction()
-//        val viewFragment = ViewFragment()
-//        viewFragment.arguments = bundle
-//
-//        transaction.replace(R.id.homeFrame, viewFragment)
-//        transaction.commit()
-//    }
 }
