@@ -1,18 +1,34 @@
 package ie.wit.models
 
 import android.content.Context
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import android.util.Log
+import com.google.gson.*
 import com.google.gson.reflect.TypeToken
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
 import ie.wit.helpers.exists
 import ie.wit.helpers.read
 import ie.wit.helpers.write
+import java.lang.reflect.Type
+import java.time.Instant
+import java.time.LocalDate
+import java.time.LocalDateTime.ofInstant
+import java.time.OffsetDateTime.ofInstant
+import java.time.OffsetTime.ofInstant
+import java.time.ZoneId
+import java.time.ZonedDateTime.ofInstant
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.log10
 
 
 val JSON_FILE = "movies.json"
-val gsonBuilder = GsonBuilder().setPrettyPrinting().create()
+val gsonBuilder = GsonBuilder()
+  .setPrettyPrinting()
+  //.registerTypeAdapter(LocalDate::class.java, JsonSerialCustom())
+ // .registerTypeAdapter(LocalDate::class.java, JsonDeserialCustom())
+  .create()
 val listType = object : TypeToken<ArrayList<MovieModel>>() {}.type
 
 fun generateRandomId(): Long {
@@ -43,6 +59,9 @@ class MovieJSONStore : MovieStore {
   override fun create(movie: MovieModel) {
     movie.id = generateRandomId()
     movies.add(movie)
+    for(m in movies) {
+      Log.i("deserialize", m.releaseDate.toString())
+    }
     serialize()
   }
 
@@ -70,6 +89,7 @@ class MovieJSONStore : MovieStore {
     val jsonString = gsonBuilder.toJson(movies,
         listType
     )
+    Log.i("serialize", jsonString)
     write(context, JSON_FILE, jsonString)
   }
 
@@ -78,7 +98,44 @@ class MovieJSONStore : MovieStore {
         JSON_FILE
     )
     movies = Gson().fromJson(jsonString,
-        listType
-    )
+        listType)
+
+    for(m in movies){
+      Log.i("deserialize", m.releaseDate.toString())
+    }
   }
 }
+
+//class LocalDateTypeAdapter : TypeAdapter<LocalDate>() {
+//  override fun write(out: JsonWriter, value: LocalDate?) {
+//    out.value(DateTimeFormatter.ISO_LOCAL_DATE.format(value))
+//  }
+//
+//  override fun read(input: JsonReader): LocalDate = LocalDate.parse(input.nextString())
+//
+//}
+
+//class JsonSerialCustom : JsonSerializer<LocalDate>{
+//
+//  val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+//
+//  override fun serialize(
+//    src: LocalDate?,
+//    typeOfSrc: Type?,
+//    context: JsonSerializationContext?
+//  ): JsonElement {
+//    return JsonPrimitive(formatter.format(src))
+//  }
+//
+//}
+
+//class JsonDeserialCustom : JsonDeserializer<LocalDate>{
+//  override fun deserialize(
+//    json: JsonElement?,
+//    typeOfT: Type?,
+//    context: JsonDeserializationContext?
+//  ): LocalDate {
+//    return LocalDate.parse(json?.asString, DateTimeFormatter.ofPattern("dd-MM-yyyy").withLocale(Locale.ENGLISH))
+//  }
+//
+//}

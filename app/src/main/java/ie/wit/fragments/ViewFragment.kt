@@ -38,6 +38,12 @@ class ViewFragment : Fragment(), MovieClickListener {
         super.onCreate(savedInstanceState)
         app = activity?.application as MovieApp
 
+        var test = app.moviesStore.findAll()
+
+        for (t in test){
+            Log.i("test", t.image)
+            Log.i("test", t.releaseDate.toString())
+        }
     }
 
     override fun onCreateView(
@@ -137,8 +143,6 @@ class ViewFragment : Fragment(), MovieClickListener {
                 tempList.add(m)
             }
         }
-
-        //root.recyclerView.adapter = MoviesAdapter(tempList,this)
         (root.recyclerView.adapter as MoviesAdapter).updateList(tempList)
         (root.recyclerView.adapter as MoviesAdapter).notifyDataSetChanged()
     }

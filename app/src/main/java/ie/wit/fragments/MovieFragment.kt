@@ -22,8 +22,10 @@ import ie.wit.main.MovieApp
 import ie.wit.models.MovieModel
 import kotlinx.android.synthetic.main.fragment_movie.view.*
 import kotlinx.android.synthetic.main.fragment_movie.*
+import java.text.ParseException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeParseException
 
 class MovieFragment : Fragment() {
 
@@ -57,6 +59,14 @@ class MovieFragment : Fragment() {
                 updateMovie(root,editMovieID)
             }
         }
+
+        if (root.movieImage.drawable == null) {
+            root.addImageBtn.setText(R.string.image_add_button)
+        }
+        else{
+            root.addImageBtn.setText(R.string.change_image)
+        }
+
         setButtonListener(root)
         return root
     }
@@ -72,29 +82,40 @@ class MovieFragment : Fragment() {
     }
 
     fun setButtonListener( layout: View) {
+
         layout.addMovieBtn.setOnClickListener {
 
-            val dateOfRelease = LocalDate.parse(movieReleaseDate.text, dateformat)
+            val dateOfRelease = movieReleaseDate.text.toString()
 
-            movie.title = movieTitle.text.toString()
-            movie.director = movieDirector.text.toString()
-            movie.releaseDate = dateOfRelease
-            movie.earnings = movieEarnings.text.toString().toLong()
-            movie.description = movieDescription.text.toString()
-            movie.rating = movieRating.rating.toLong()
+            if (CheckValidDate(dateOfRelease)) {
 
-            if(movie.title.isEmpty()||movie.director.isEmpty()||movie.description.isEmpty()||movieReleaseDate.length()==0) {
-                activity?.toast("Please enter required fields (title,director,description,release date")
-            }
-            else {
-                if(edit){
-                    app.moviesStore.update(movie.copy())
+                movie.title = movieTitle.text.toString()
+                movie.director = movieDirector.text.toString()
+                movie.releaseDate = LocalDate.parse(dateOfRelease, dateformat)
+                movie.earnings = movieEarnings.text.toString().toLong()
+                movie.description = movieDescription.text.toString()
+                movie.rating = movieRating.rating.toLong()
+
+                if (movie.title.isEmpty() || movie.director.isEmpty() || movie.description.isEmpty()) {
+                    activity?.toast("Please enter required fields (title,director,description)")
                 } else {
-                    app.moviesStore.create(movie.copy())
+                    if (edit) {
+                        app.moviesStore.update(movie.copy())
+                        activity?.toast("Successfully updated movie details")
+                        (activity as Home).navigateTo(ViewFragment())
+                    } else {
+                        app.moviesStore.create(movie.copy())
+                        activity?.toast("Movie has been added successfully")
+                        Log.i("create", movie.releaseDate.toString())
+
+                        (activity as Home).navigateTo(ViewFragment())
+                    }
                 }
+            } else {
+                activity?.toast("Please enter a valid date")
             }
         }
-        layout.addImageBtn.setOnClickListener{
+        layout.addImageBtn.setOnClickListener {
             pickImageFromGallery()
         }
     }
@@ -115,9 +136,6 @@ class MovieFragment : Fragment() {
             view.movieRating.rating = movie.rating.toFloat()
             view.movieImage.setImageBitmap(readImageFromPath((activity as Home), movie.image))
 
-            if (movie.image != null) {
-                view.addImageBtn.setText(R.string.change_image)
-            }
             view.addMovieBtn.setText(R.string.save_changes)
         }
     }
@@ -126,6 +144,19 @@ class MovieFragment : Fragment() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         startActivityForResult(intent, IMAGE_PICK_CODE)
+    }
+
+    fun CheckValidDate(date: String) : Boolean{
+        var isValid: Boolean
+
+        isValid = try{
+           dateformat.parse(date)
+            true
+        } catch(ex: DateTimeParseException){
+            ex.printStackTrace()
+            false
+        }
+        return isValid
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
