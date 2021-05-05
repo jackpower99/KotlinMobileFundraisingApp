@@ -1,16 +1,36 @@
 package ie.wit.models
 
 import android.os.Parcelable
+import com.google.firebase.database.Exclude
+import com.google.firebase.database.IgnoreExtraProperties
 import kotlinx.android.parcel.Parcelize
 import java.time.LocalDate
 import java.util.*
 
+@IgnoreExtraProperties
 @Parcelize
-data class MovieModel (var id: Long = 0, var title: String = "",
+data class MovieModel (var uid: String? = "", var id: Int = 0, var title: String = "",
                        var director: String = "",
-                       var releaseDate: LocalDate = LocalDate.now(),
-                       var earnings : Long = 0,
+                       var releaseDate: String = "",
+                       var earnings : Int = 0,
                        var description: String = "",
-                       var rating : Long = 0,
+                       var rating : Int = 0,
                        var image : String =""
 ) : Parcelable
+
+{
+    @Exclude
+    fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "uid" to uid,
+            "id" to id,
+            "title" to title,
+            "director" to director,
+            "releaseDate" to releaseDate,
+            "earnings" to earnings,
+            "description" to description,
+            "rating" to rating,
+            "image" to image
+        )
+    }
+}

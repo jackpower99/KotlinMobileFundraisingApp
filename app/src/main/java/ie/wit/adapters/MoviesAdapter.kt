@@ -19,7 +19,7 @@ interface MovieClickListener {
     fun onMovieClick(movie: MovieModel)
 }
 
-class MoviesAdapter constructor(private var movies: List<MovieModel>, private val listener: MovieClickListener)
+class MoviesAdapter constructor(private var movies: ArrayList<MovieModel>, private val listener: MovieClickListener)
     : RecyclerView.Adapter<MoviesAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -51,8 +51,13 @@ class MoviesAdapter constructor(private var movies: List<MovieModel>, private va
             }
         }
 
-    fun updateList(list: MutableList<MovieModel>) {
+    fun updateList(list: ArrayList<MovieModel>) {
         movies = list
         notifyDataSetChanged()
+    }
+
+    fun removeAt(position: Int) {
+        movies.removeAt(position)
+        notifyItemRemoved(position)
     }
 }

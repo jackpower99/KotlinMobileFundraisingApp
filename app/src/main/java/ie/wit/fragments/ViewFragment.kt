@@ -1,8 +1,6 @@
 package ie.wit.fragments
 
 
-import android.app.Activity
-import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.core.view.get
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,15 +19,25 @@ import ie.wit.activities.Home
 import ie.wit.adapters.MovieClickListener
 import ie.wit.adapters.MoviesAdapter
 import ie.wit.main.MovieApp
-import ie.wit.models.MovieMemStore
 import ie.wit.models.MovieModel
-import kotlinx.android.synthetic.main.fragment_report.*
+import ie.wit.utils.createLoader
+import ie.wit.utils.showLoader
 import kotlinx.android.synthetic.main.fragment_report.view.*
+import androidx.appcompat.app.AlertDialog
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import ie.wit.utils.hideLoader
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
-class ViewFragment : Fragment(), MovieClickListener {
+class ViewFragment : Fragment(), MovieClickListener, AnkoLogger {
 
     lateinit var app: MovieApp
     private lateinit var editTextSearch: EditText
+
+    lateinit var loader : AlertDialog
 
     lateinit var removedMovie : MovieModel
 
@@ -38,12 +45,6 @@ class ViewFragment : Fragment(), MovieClickListener {
         super.onCreate(savedInstanceState)
         app = activity?.application as MovieApp
 
-        var test = app.moviesStore.findAll()
-
-        for (t in test){
-            Log.i("test", t.image)
-            Log.i("test", t.releaseDate.toString())
-        }
     }
 
     override fun onCreateView(
@@ -53,8 +54,10 @@ class ViewFragment : Fragment(), MovieClickListener {
         // Inflate the layout for this fragment
         var root = inflater.inflate(R.layout.fragment_report, container, false)
 
+        setSwipeRefresh(root)
+        loader = createLoader(activity!!)
+
         root.recyclerView.setLayoutManager(LinearLayoutManager(activity))
-        root.recyclerView.adapter = MoviesAdapter(app.moviesStore.findAll(),this)
 
         val itemSwipe = object : ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.RIGHT){
 
@@ -82,11 +85,16 @@ class ViewFragment : Fragment(), MovieClickListener {
 
         builder.setPositiveButton("Confirm"){ dialog, which ->
             val position = viewHolder.adapterPosition
-            val movieTest = app.moviesStore.findAll()
-
+            val movieTest = app.movies
+//
             removedMovie = movieTest[position]
 
-            app.moviesStore.deleteMovie(removedMovie.id)
+            info(removedMovie.uid)
+            deleteMovie(removedMovie.uid)
+            info("1")
+            deleteUserMovie(app.auth.currentUser!!.uid,
+                removedMovie.uid)
+
             root.recyclerView.adapter?.notifyItemRemoved(position)
             root.recyclerView.adapter?.notifyDataSetChanged()
         }
@@ -106,11 +114,40 @@ class ViewFragment : Fragment(), MovieClickListener {
             }
     }
 
+    fun deleteUserMovie(userId: String, uid: String?) {
+        info(app.database.child("user-movies").child(userId).child(uid!!))
+        app.database.child("user-movies").child(userId).child(uid!!)
+            .addListenerForSingleValueEvent(
+                object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        snapshot.ref.removeValue()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        info("Firebase Movie error : ${error.message}")
+                    }
+                })
+    }
+
+    fun deleteMovie(uid: String?) {
+        app.database.child("movies").child(uid!!)
+            .addListenerForSingleValueEvent(
+                object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        snapshot.ref.removeValue()
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        info("Firebase Movie error : ${error.message}")
+                    }
+                })
+    }
+
     override fun onMovieClick(movie: MovieModel) {
         Log.i("test", movie.id.toString())
                 val fragment = MovieFragment()
                 val args = Bundle()
-                args.putLong("movieID", movie.id)
+                args.putInt("movieID", movie.id)
                 fragment.setArguments(args)
 
         (activity as Home).navigateTo(fragment)
@@ -134,9 +171,52 @@ class ViewFragment : Fragment(), MovieClickListener {
         })
 
     }
+    override fun onResume() {
+        super.onResume()
+        getAllMovies(app.auth.currentUser!!.uid, this.view!!)
+    }
+
+    fun getAllMovies(userId: String?, root: View) {
+        showLoader(loader, "Downloading movies from Firebase")
+        var moviesList = ArrayList<MovieModel>()
+        app.database.child("user-movies").child(userId!!)
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    info("Firebase Movie error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val children = snapshot!!.children
+                    children.forEach {
+                        val movie = it.getValue<MovieModel>(MovieModel::class.java!!)
+
+                        moviesList.add(movie!!)
+                        app.movies = moviesList
+                        root.recyclerView?.adapter =
+                            MoviesAdapter(app.movies, this@ViewFragment)
+                        root.recyclerView?.adapter?.notifyDataSetChanged()
+                        checkSwipeRefresh(root)
+                        hideLoader(loader)
+                        app.database.child("user-movies").child(userId!!).removeEventListener(this)
+                    }
+                }
+            })
+    }
+    fun setSwipeRefresh(root : View) {
+        root.swiperefresh.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener {
+            override fun onRefresh() {
+                root.swiperefresh.isRefreshing = true
+                getAllMovies(app.auth.currentUser!!.uid, root)
+            }
+        })
+    }
+
+    fun checkSwipeRefresh(root: View) {
+        if (root.swiperefresh.isRefreshing) root.swiperefresh.isRefreshing = false
+    }
 
     private fun filterList(filterItem: String,root: View){
-        var tempList: MutableList<MovieModel> = ArrayList()
+        var tempList: ArrayList<MovieModel> = ArrayList()
 
         for(m in app.moviesStore.findAll()){
             if(filterItem in m.title){

@@ -31,8 +31,8 @@ val gsonBuilder = GsonBuilder()
   .create()
 val listType = object : TypeToken<ArrayList<MovieModel>>() {}.type
 
-fun generateRandomId(): Long {
-  return Random().nextLong()
+fun generateRandomId(): Int {
+  return Random().nextInt()
 }
 
 class MovieJSONStore : MovieStore {
@@ -51,7 +51,7 @@ class MovieJSONStore : MovieStore {
     return movies
   }
 
-  override fun findById(id: Long): MovieModel? {
+  override fun findById(id: Int): MovieModel? {
     val foundMovie: MovieModel? = movies.find { it.id == id }
     return foundMovie
   }
@@ -80,7 +80,7 @@ class MovieJSONStore : MovieStore {
     serialize()
   }
 
-  override fun deleteMovie(id: Long) {
+  override fun deleteMovie(id: Int) {
     movies.removeIf{m-> (id == m.id)}
     serialize()
   }

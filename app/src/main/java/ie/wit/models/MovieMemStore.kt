@@ -3,9 +3,9 @@ package ie.wit.models
 import android.util.Log
 import kotlinx.android.synthetic.main.fragment_movie.*
 
-var lastId = 0L
+var lastId = 0
 
-internal fun getId(): Long {
+internal fun getId(): Int {
     return lastId++
 }
 
@@ -19,7 +19,7 @@ class MovieMemStore : MovieStore {
 
     }
 
-    override fun findById(id: Long): MovieModel? {
+    override fun findById(id: Int): MovieModel? {
         val foundMovie: MovieModel? = movies.find { it.id == id }
         return foundMovie
     }
@@ -44,7 +44,7 @@ class MovieMemStore : MovieStore {
         }
     }
 
-    override fun deleteMovie(id: Long) {
+    override fun deleteMovie(id: Int) {
         movies.removeIf{m-> (id == m.id)}
         Log.i("deleted movie: ", id.toString())
 
