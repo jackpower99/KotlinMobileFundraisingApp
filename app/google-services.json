@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "739008170096-1ekrba16jtfubl3qs83hfchgpi9nl2e3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ie.wit",
+            "certificate_hash": "6d29e4b4862ba36651e1dc21ddccaaf482cd9aaa"
+          }
+        },
+        {
           "client_id": "739008170096-cg1rt6funelf3j0i1jtiu3j4lgkq40np.apps.googleusercontent.com",
           "client_type": 3
         }

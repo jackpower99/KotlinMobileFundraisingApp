@@ -39,7 +39,7 @@ class MovieMemStore : MovieStore {
             foundMovie.earnings = movie.earnings
             foundMovie.description = movie.description
             foundMovie.rating = movie.rating
-            foundMovie.image = movie.image
+            //foundMovie.image = movie.image
             logAll()
         }
     }

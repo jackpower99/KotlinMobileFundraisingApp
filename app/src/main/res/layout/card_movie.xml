@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/movie_view_Image"
             android:layout_width="110dp"
-            android:layout_height="163dp"
+            android:layout_height="143dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginRight="16dp"
@@ -29,7 +29,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="13dp"
             android:textSize="24sp"
             tools:text="Inception" />
 
@@ -40,7 +40,7 @@
             android:layout_below="@+id/movie_view_Title"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="13dp"
             android:textSize="18sp"
             tools:text="Christopher Nolan" />
 
@@ -51,7 +51,7 @@
             android:layout_below="@+id/movie_view_director"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="13dp"
             android:textSize="18sp"
             tools:text="12/08/2003" />
 
@@ -62,9 +62,29 @@
             android:layout_below="@+id/movie_view_releaseDate"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="5dp"
-            android:isIndicator="true"
-            />
+            android:layout_marginEnd="13dp"
+            android:isIndicator="true" />
+
+        <ImageView
+            android:id="@+id/userpic"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@+id/movie_view_Image"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="12dp"
+            tools:srcCompat="@tools:sample/avatars"
+            app:layout_constraintTop_toBottomOf="@+id/movie_view_Image"/>
+
+        <ImageView
+            android:id="@+id/starImageCard"
+            android:layout_width="44dp"
+            android:layout_height="35dp"
+            android:layout_below="@+id/movie_view_Image"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@+id/userpic"
+            app:srcCompat="@android:drawable/star_big_off" />
 
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

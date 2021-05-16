@@ -10,10 +10,16 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 import ie.wit.R
+import ie.wit.fragments.AllMoviesFragment
 import ie.wit.fragments.MovieFragment
+import ie.wit.fragments.UserFavouritesFragment
 import ie.wit.fragments.ViewFragment
+import ie.wit.helpers.*
 import ie.wit.main.MovieApp
+import jp.wasabeef.picasso.transformations.CropCircleTransformation
 import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.home.*
 import kotlinx.android.synthetic.main.nav_header_home.view.*
@@ -37,6 +43,9 @@ class Home : AppCompatActivity(),
         navView.setNavigationItemSelectedListener(this)
 
         navView.getHeaderView(0).navheaderemail.text = app.auth.currentUser?.email
+        navView.getHeaderView(0).nav_header_name.text = app.auth.currentUser?.displayName
+
+        checkExistingPhoto(app,this)
 
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar,
@@ -51,6 +60,9 @@ class Home : AppCompatActivity(),
         val fragment = MovieFragment.newInstance()
         ft.replace(R.id.homeFrame, fragment)
         ft.commit()
+
+        navView.getHeaderView(0).imageView
+            .setOnClickListener { showImagePicker(this,1) }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -58,8 +70,11 @@ class Home : AppCompatActivity(),
         when (item.itemId) {
             R.id.nav_movies -> navigateTo(ViewFragment.newInstance())
             R.id.nav_add -> navigateTo(MovieFragment.newInstance())
+            R.id.nav_favourites -> navigateTo(UserFavouritesFragment.newInstance())
             R.id.nav_sign_out ->
                 signOut()
+            R.id.nav_report_all ->
+                navigateTo(AllMoviesFragment.newInstance())
 
             else -> toast("You Selected Something Else")
         }
@@ -100,5 +115,26 @@ class Home : AppCompatActivity(),
         app.auth.signOut()
         startActivity<Login>()
         finish()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            1 -> {
+                if (data != null) {
+                    writeImageRef(app,readImageUri(resultCode, data).toString())
+                    Picasso.get().load(readImageUri(resultCode, data).toString())
+                        .resize(180, 180)
+                        .transform(CropCircleTransformation())
+                        .into(navView.getHeaderView(0).imageView, object : Callback {
+                            override fun onSuccess() {
+                                // Drawable is ready
+                                uploadImageView(app,navView.getHeaderView(0).imageView)
+                            }
+                            override fun onError(e: Exception) {}
+                        })
+                }
+            }
+        }
     }
 }

@@ -19,6 +19,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/imagefavourite"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="75dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toStartOf="@+id/movieImage"
+        app:layout_constraintTop_toBottomOf="@+id/movieRatingLabel"
+        app:srcCompat="@android:drawable/star_big_off" />
+
     <TextView
         android:id="@+id/movieTitleLabel"
         android:layout_width="130dp"
@@ -190,12 +201,11 @@
 
     <ImageView
         android:id="@+id/movieImage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="277dp"
+        android:layout_height="68dp"
         android:layout_marginTop="10dp"
         android:src="@mipmap/ic_launcher"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addImageBtn" />
 
 

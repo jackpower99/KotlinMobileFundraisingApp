@@ -15,7 +15,8 @@ data class MovieModel (var uid: String? = "", var id: Int = 0, var title: String
                        var earnings : Int = 0,
                        var description: String = "",
                        var rating : Int = 0,
-                       var image : String =""
+                       var profilepic : String ="",
+                       var isFavourite : Boolean = true
 ) : Parcelable
 
 {
@@ -30,7 +31,8 @@ data class MovieModel (var uid: String? = "", var id: Int = 0, var title: String
             "earnings" to earnings,
             "description" to description,
             "rating" to rating,
-            "image" to image
+            "profilepic" to profilepic,
+            "isFavourite" to isFavourite
         )
     }
 }

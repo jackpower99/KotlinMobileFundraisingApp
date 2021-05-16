@@ -22,7 +22,7 @@ import ie.wit.main.MovieApp
 import ie.wit.models.MovieModel
 import ie.wit.utils.createLoader
 import ie.wit.utils.showLoader
-import kotlinx.android.synthetic.main.fragment_report.view.*
+import kotlinx.android.synthetic.main.fragment_movies_view.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.database.DataSnapshot
@@ -32,7 +32,7 @@ import ie.wit.utils.hideLoader
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
 
-class ViewFragment : Fragment(), MovieClickListener, AnkoLogger {
+open class ViewFragment : Fragment(), MovieClickListener, AnkoLogger {
 
     lateinit var app: MovieApp
     private lateinit var editTextSearch: EditText
@@ -52,7 +52,7 @@ class ViewFragment : Fragment(), MovieClickListener, AnkoLogger {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        var root = inflater.inflate(R.layout.fragment_report, container, false)
+        var root = inflater.inflate(R.layout.fragment_movies_view, container, false)
 
         setSwipeRefresh(root)
         loader = createLoader(activity!!)
@@ -73,7 +73,7 @@ class ViewFragment : Fragment(), MovieClickListener, AnkoLogger {
         val swap = ItemTouchHelper(itemSwipe)
         swap.attachToRecyclerView(root.recyclerView)
 
-        searchMovies(root)
+        //searchMovies(root)
 
         return root
     }
@@ -85,15 +85,16 @@ class ViewFragment : Fragment(), MovieClickListener, AnkoLogger {
 
         builder.setPositiveButton("Confirm"){ dialog, which ->
             val position = viewHolder.adapterPosition
-            val movieTest = app.movies
+            val uid = (viewHolder.itemView.tag as MovieModel).uid
+            info(uid)
+            //val movieTest = app.movies
 //
-            removedMovie = movieTest[position]
+ //           removedMovie = movieTest[position]
 
-            info(removedMovie.uid)
-            deleteMovie(removedMovie.uid)
+            //info(removedMovie.uid)
+            deleteMovie(uid)
             info("1")
-            deleteUserMovie(app.auth.currentUser!!.uid,
-                removedMovie.uid)
+            deleteUserMovie(app.auth.currentUser!!.uid, uid)
 
             root.recyclerView.adapter?.notifyItemRemoved(position)
             root.recyclerView.adapter?.notifyDataSetChanged()
@@ -144,41 +145,42 @@ class ViewFragment : Fragment(), MovieClickListener, AnkoLogger {
     }
 
     override fun onMovieClick(movie: MovieModel) {
-        Log.i("test", movie.id.toString())
+        Log.i("local", movie.uid.toString())
                 val fragment = MovieFragment()
                 val args = Bundle()
-                args.putInt("movieID", movie.id)
+                args.putParcelable("movieID", movie)
                 fragment.setArguments(args)
 
         (activity as Home).navigateTo(fragment)
     }
 
-    fun searchMovies(view: View){
-        editTextSearch = view.search_bar
+//    fun searchMovies(view: View){
+//        editTextSearch = view.search_bar
+//
+//        editTextSearch.addTextChangedListener(object :TextWatcher{
+//            override fun afterTextChanged(s: Editable?) {
+//                filterList(s.toString(),view)
+//
+//            }
+//
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//            }
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//            }
+//
+//        })
 
-        editTextSearch.addTextChangedListener(object :TextWatcher{
-            override fun afterTextChanged(s: Editable?) {
-                filterList(s.toString(),view)
-
-            }
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            }
-
-        })
-
-    }
+ //   }
     override fun onResume() {
         super.onResume()
+        if(this::class == ViewFragment::class)
         getAllMovies(app.auth.currentUser!!.uid, this.view!!)
     }
 
     fun getAllMovies(userId: String?, root: View) {
         showLoader(loader, "Downloading movies from Firebase")
-        var moviesList = ArrayList<MovieModel>()
+        val moviesList = ArrayList<MovieModel>()
         app.database.child("user-movies").child(userId!!)
             .addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {
@@ -189,20 +191,20 @@ class ViewFragment : Fragment(), MovieClickListener, AnkoLogger {
                     val children = snapshot!!.children
                     children.forEach {
                         val movie = it.getValue<MovieModel>(MovieModel::class.java!!)
-
+                        info(movie)
                         moviesList.add(movie!!)
-                        app.movies = moviesList
+                        info(moviesList)
                         root.recyclerView?.adapter =
-                            MoviesAdapter(app.movies, this@ViewFragment)
+                            MoviesAdapter(moviesList,false, this@ViewFragment)
                         root.recyclerView?.adapter?.notifyDataSetChanged()
                         checkSwipeRefresh(root)
                         hideLoader(loader)
-                        app.database.child("user-movies").child(userId!!).removeEventListener(this)
+                        app.database.child("user-movies").child(userId).removeEventListener(this)
                     }
                 }
             })
     }
-    fun setSwipeRefresh(root : View) {
+    open fun setSwipeRefresh(root : View) {
         root.swiperefresh.setOnRefreshListener(object : SwipeRefreshLayout.OnRefreshListener {
             override fun onRefresh() {
                 root.swiperefresh.isRefreshing = true
@@ -215,15 +217,15 @@ class ViewFragment : Fragment(), MovieClickListener, AnkoLogger {
         if (root.swiperefresh.isRefreshing) root.swiperefresh.isRefreshing = false
     }
 
-    private fun filterList(filterItem: String,root: View){
-        var tempList: ArrayList<MovieModel> = ArrayList()
-
-        for(m in app.moviesStore.findAll()){
-            if(filterItem in m.title){
-                tempList.add(m)
-            }
-        }
-        (root.recyclerView.adapter as MoviesAdapter).updateList(tempList)
-        (root.recyclerView.adapter as MoviesAdapter).notifyDataSetChanged()
-    }
+//    private fun filterList(filterItem: String,root: View){
+//        var tempList: ArrayList<MovieModel> = ArrayList()
+//
+//        for(m in app.moviesStore.findAll()){
+//            if(filterItem in m.title){
+//                tempList.add(m)
+//            }
+//        }
+//        (root.recyclerView.adapter as MoviesAdapter).updateList(tempList)
+//        (root.recyclerView.adapter as MoviesAdapter).notifyDataSetChanged()
+//    }
 }
